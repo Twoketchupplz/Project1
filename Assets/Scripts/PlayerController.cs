@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    const float MAX_POWER = 6f;
-    const float MIN_POWER = 1f;
+    public const float MAX_ENGINE_POWER = 6f;
+    public const float MIN_ENGINE_POWER = 1f;
     float EnginePower = 0f;
     float Accel = 0f;
     float MaxSpeed; // +- 0 ~ 90f
@@ -75,7 +75,7 @@ public class PlayerController : MonoBehaviour
         float nPower = EnginePower;
         if (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
         {
-            if (EnginePower < MAX_POWER)
+            if (EnginePower < MAX_ENGINE_POWER)
             {
                 nPower += 0.02f;
             }
@@ -83,7 +83,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             // 자연 감소; 유지;
-            if (EnginePower > MIN_POWER)
+            if (EnginePower > MIN_ENGINE_POWER)
             {
                 nPower -= 0.005f;
             }
