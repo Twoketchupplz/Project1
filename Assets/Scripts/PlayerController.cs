@@ -2,16 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO: vehicle Objectification!!
+
 public class PlayerController : MonoBehaviour
 {
+	// NOTE: for Override
 	public const float MAX_ENGINE_POWER = 6f;
 	public const float MIN_ENGINE_POWER = 1f;
+	enum Gear { P, R, N, D1, D2, D3 }; // arrow로 계산할수 있어야하며 차종마다 다름; 수동은 파킹이 없으며, 기본적으로 5단까지 존재 Reverse는 따로 버튼도 존재; 후진을 위한 더블 클러치
+
+	// NOTE: vehicle common state
 	int ParkingBrake = 1;
 	float EnginePower = 0f;
 	float Accel = 0f;
 	float MaxSpeed; // +- 0 ~ 90f
 	float CurSpeed = 0f;
-	enum Gear { P, R, N, D1, D2, D3 };
 	Gear CurGear = 0;
 	Gear TempGear = 0;
 
@@ -20,22 +25,23 @@ public class PlayerController : MonoBehaviour
 	{
 		Debug.Log("시작");
 	}
-
 	// Update is called once per frame
 	void Update()
 	{
-		// 사이드 브레이크 조작
-		if(Input.GetKeyDown(KeyCode.KeypadEnter)) CtrlParkingBrake();
-		// 기어 변환
+		//사이드 브레이크 조작
+		if (Input.GetKeyDown(KeyCode.KeypadEnter)) CtrlParkingBrake();
+		// 기어변환
 		if (Input.GetKey(KeyCode.LeftShift)) TempGear = ShiftGear(TempGear);
 		if (Input.GetKeyUp(KeyCode.LeftShift)) CurGear = TempGear;
 
+		// TODO: Making 'Move()' method
 		EngineControl();
 		Accel = GetAcceleration() + GetExternalForce();
 		SpeedCalculation();
 		RotateHandle();
 	}
 
+	// TODO: 차종이 달라도 메소드는 그대로
 	void RotateHandle()
 	{
 		float angle = 5f;
@@ -48,7 +54,6 @@ public class PlayerController : MonoBehaviour
 
 		transform.Rotate(Vector3.up, horizontalInput * angle * rotSpd * Time.deltaTime);
 	}
-
 	void SpeedCalculation()
 	{
 		float brakeLvl = 0.6f;
@@ -84,7 +89,7 @@ public class PlayerController : MonoBehaviour
 	}
 	void EngineControl()
 	{
-		// 엑셀을 밟고 있는 표현이 가능하면 좋겠다
+		// Note 엑셀 강도 표시
 		float nPower = EnginePower;
 		if (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
 		{
@@ -107,7 +112,6 @@ public class PlayerController : MonoBehaviour
 		}
 		EnginePower = nPower;
 	}
-
 	float GetAcceleration()
 	{
 		// 엔진 출력와 기어비 계산
@@ -122,7 +126,6 @@ public class PlayerController : MonoBehaviour
 
 		return EnginePower * level;
 	}
-
 	float GetExternalForce()
 	{
 		float force = 0f;
@@ -134,14 +137,10 @@ public class PlayerController : MonoBehaviour
 		}
 		return force;
 	}
-
 	Gear ShiftGear(Gear gear)
 	{
-		// P, R, N, D1, D2, D3
+		// TODO: 차종에 따라 `Gear`가 다름, 기어 조작은 H스타일
 		Gear nextGear = gear;
-		// 키보드 화살표를 활용한 기어 변환
-		// 스틱 기어 위치는 추후 H스타일로 변환
-		// 키패드로 조작불가 화살표로 변경
 		if (Input.GetKeyDown(KeyCode.UpArrow) && nextGear != Gear.P)
 		{
 			nextGear--;
@@ -153,24 +152,12 @@ public class PlayerController : MonoBehaviour
 			Debug.Log("arrow down: " + nextGear);
 		}
 
-		// 마우스 스크롤을 활용한 기어 변환
-		// if (Input.GetAxis("Mouse ScrollWheel") > 0 && nextGear != Gear.P)
-		// {
-		// 	nextGear--;
-		// 	Debug.Log("wheel up: " + nextGear);
-		// }
-		// else if (Input.GetAxis("Mouse ScrollWheel") < 0 && nextGear != Gear.D3)
-		// {
-		// 	nextGear++;
-		// 	Debug.Log("wheel down: " + nextGear);
-		// }
-
 		return nextGear;
 	}
-
-	// TODO 사이드 속도가 점진적으로 줄어들어야함
-	void CtrlParkingBrake(){
-		if (ParkingBrake == 1) {ParkingBrake = 0; Debug.Log("Side brake ON");}
-		else {ParkingBrake = 1; Debug.Log("Side brake OFF");}
+	void CtrlParkingBrake()
+	{
+		// TODO: 사이드 속도가 점진적 감소
+		if (ParkingBrake == 1) { ParkingBrake = 0; Debug.Log("Side brake ON"); }
+		else { ParkingBrake = 1; Debug.Log("Side brake OFF"); }
 	}
 }
