@@ -7,10 +7,11 @@ public class PlayerController : MonoBehaviour
 	public float MinEP;
 	public float MaxEP;
 	VehicleController Vctrl;
+	// TankController Vctrl;
 	// Start is called before the first frame update
 	void Start()
 	{
-		Vctrl = new VehicleController(transform, MinEP, MaxEP);
+		Vctrl = new TankController(transform, MinEP, MaxEP);
 		Debug.Log("시작");
 		Debug.Log("파킹브레이크를 풀어주세요.");
 	}

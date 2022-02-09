@@ -1,19 +1,16 @@
 /*
-FIXME: 최종속도가 기어에 따라 2배수로 증가함, 중간과정이 생략되어보임
+FIXME: 최종속도가 엔진가속에 따라 2배수로 2번까지 증가함, 중간과정이 생략되어보임
 TODO
 차종 정보가 입력됨에 따라 변화해야함;
 차종에 따른 그래픽, 엔진수준, 기어, 무게
 가속도, 방향전환 속도, 브레이크 세기
-NOTE
-가독성을 위해 필드값을 매개변수로 받기?
-편의를 위해 받지 않기?
 */
 
 using UnityEngine;
 
 public class VehicleController
 {
-    public Transform transform {get; set;}
+    protected Transform VehicleTransform {get; set;}
     protected readonly float MIN_ENGINE_POWER; // 15f
     protected readonly float MAX_ENGINE_POWER; // 90f
     protected enum Gear { P, R, N, D1, D2, D3 };
@@ -30,14 +27,16 @@ public class VehicleController
     protected Gear TempGear = 0;
 
 
-    // NOTE: Public members
+    // NOTE: Constructor
     public VehicleController(Transform transform, float minEnginePower, float maxEnginePower)
     {
-        this.transform = transform;
+        this.VehicleTransform = transform;
         this.MIN_ENGINE_POWER = minEnginePower;
         this.MAX_ENGINE_POWER = maxEnginePower;
     }
-    public void Move()
+    
+    // NOTE: Methods
+    public virtual void Move()
     {
         //사이드 브레이크 조작
         if (Input.GetKeyDown(KeyCode.KeypadEnter)) CtrlParkingBrake();
@@ -50,9 +49,6 @@ public class VehicleController
         Debug.Log(CurSpeed);
         RotateHandle();
     }
-
-
-    // NOTE: Private members
     protected void RotateHandle()
     {
         float angle = 5f;
@@ -63,7 +59,7 @@ public class VehicleController
         if (rotSpd >= maxSpd) rotSpd = maxSpd;
         else if (rotSpd <= -maxSpd) rotSpd = -maxSpd;
 
-        transform.Rotate(Vector3.up, horizontalInput * angle * rotSpd * Time.deltaTime);
+        VehicleTransform.Rotate(Vector3.up, horizontalInput * angle * rotSpd * Time.deltaTime);
     }
     protected void SpeedCalculation()
     {
@@ -101,7 +97,7 @@ public class VehicleController
             // 후진 중 중립기어에 대한 계산이 없음
             if (CurSpeed < MaxSpeed) CurSpeed += Accel;
         }
-        transform.Translate(Vector3.forward * Time.deltaTime * CurSpeed);
+        VehicleTransform.Translate(Vector3.forward * Time.deltaTime * CurSpeed);
     }
     protected void EngineControl()
     {
