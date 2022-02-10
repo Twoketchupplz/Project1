@@ -1,7 +1,5 @@
 /* 
-TODO: 부모 타입의 인스턴스에서 자식인 TankCtrl클래스의 함수를 불러야함!
-NOTE 캐스팅으로 해결 가능; 다이나믹하게 해보자; as is
-근데 왜 되냐???
+is as
 
 발사 기능
 Barrel = Turret.GetChild
