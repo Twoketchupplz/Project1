@@ -10,9 +10,12 @@ using UnityEngine;
 public class TankController : VehicleController
 {
     Transform TurretTransform;
-    public TankController(Transform trans, float minPower, float maxPower) : base(trans, minPower, maxPower)
+    public TankController(Transform trans) : base(trans)
     {
-        TurretTransform = VehicleTransform.GetChild(0).transform;
+        TurretTransform = VehicleTransform.GetChild(0).GetChild(0).transform;
+        base.MinEnginePower = 10;
+        base.MaxEnginePower = 50;
+        TurretTransform.Rotate(Vector3.up, 0f);
     }
 
     public override void Move()
@@ -40,6 +43,9 @@ public class TankController : VehicleController
             //rotate right
             TurretTransform.Rotate(Vector3.up, spd * Time.deltaTime);
         }
-        // 위치는 고정
+        // 확인
+        if (Input.GetKeyUp(KeyCode.Comma) || Input.GetKeyUp(KeyCode.Period)){
+            Debug.Log("Turret Rotated");
+        }
     }
 }
