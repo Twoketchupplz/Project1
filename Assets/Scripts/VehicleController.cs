@@ -1,8 +1,9 @@
 /*
 FIXME: 최종속도가 엔진가속에 따라 2배수로 2번까지 증가함, 중간과정이 생략되어보임
-NOTE: 엔진 동작에 이상 없음
-NOTE: {(EnginePower * GLevel) + External}
-NOTE: 최종 curSpeed가 문제
+엔진 동작에 이상 없음, Accel 값에 이상 없음
+{(EnginePower * GLevel) + External}
+MaxSpeed와 CurSpeed가 최신화 순서가 이상한듯
+!! 혹시 Update(), LateUpdate()에서 문제를 해결할 수 있지 않을까?
 FIXME: 자연 속도 감소가 일어나지 않음
 FIXME: 완전 제동 이후 엔진 RPM이 미쳐 낮아지지 않아 브레이크를 해제하면 급발진함 이게 정상작동인가?
 TODO
