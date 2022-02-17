@@ -31,8 +31,6 @@ public class VehicleController
     protected Gear CurGear = 0;
     protected Gear TempGear = 0;
 
-
-    // NOTE: Constructor
     public VehicleController(Transform trans)
     {
         this.VehicleTransform = trans;
@@ -52,10 +50,6 @@ public class VehicleController
         Accel = GetAcceleration() + GetExternalForce();
         SpeedCalculation();
         RotateHandle();
-        // Debug.Log("Engine: " + EnginePower);
-        // Debug.Log("Accel: " + Accel);
-        // Debug.Log("MaxSpd: " + MaxSpeed);
-        // Debug.Log("Speed: " + CurSpeed);
     }
     protected void RotateHandle()
     {
@@ -103,12 +97,9 @@ public class VehicleController
             {
                     // 후진 중 중립기어에 대한 계산이 없음
                     if (CurSpeed < MaxSpeed) CurSpeed += Accel; // ?????
-                    // Debug.Log("가속도 계산");
                 }
         }
-        Debug.Log("curspd"+CurSpeed);
         VehicleTransform.Translate(Vector3.forward * Time.deltaTime * CurSpeed);
-        // Debug.Log("spd 적용");
     }
     protected void EngineControl()
     {
