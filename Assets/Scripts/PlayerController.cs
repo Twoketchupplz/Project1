@@ -7,21 +7,21 @@ public class PlayerController : MonoBehaviour
     bool ToggleKeyO = true; // Truck or Tank
 	GameObject TankPrefab, TruckPrefab;
 
-    VehicleController Vctrl;
+    VehicleController VehicleCtrl;
     void Start()
     {
 		TankPrefab = transform.GetChild(0).gameObject;
 		TruckPrefab = transform.GetChild(1).gameObject;
 		TankPrefab.SetActive(false);
 		TruckPrefab.SetActive(true);
-        Vctrl = new VehicleController(transform);
+        VehicleCtrl = new VehicleController(transform);
         Debug.Log("시작");
         Debug.Log("파킹브레이크를 풀어주세요.");
     }
     // Update is called once per frame
     void Update()
     {
-        Vctrl.Move();
+        VehicleCtrl.Move();
 		if (Input.GetKeyDown(KeyCode.O)) SwitchVehicle(ToggleKeyO);
     }
 
@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
     {
         if (toggle) // change to Tank
         {
-			Vctrl = new TankController(transform);
+			VehicleCtrl = new TankController(transform);
 			// 프리펩 전환
 			TruckPrefab.SetActive(false);
 			TankPrefab.SetActive(true);
@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
         }
         else // change to Truck
         {
-            Vctrl = new VehicleController(transform);
+            VehicleCtrl = new VehicleController(transform);
             // 프리펩 전환
             TruckPrefab.SetActive(true);
             TankPrefab.SetActive(false);

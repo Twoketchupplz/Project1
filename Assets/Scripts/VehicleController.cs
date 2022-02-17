@@ -103,7 +103,6 @@ public class VehicleController
     }
     protected void EngineControl()
     {
-        // TODO: nPower 계산 정확히
         float nPower = EnginePower;
         float incRate = 0.2f;
         float naturalRate = 0.15f;
