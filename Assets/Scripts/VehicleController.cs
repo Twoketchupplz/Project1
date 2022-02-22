@@ -4,7 +4,6 @@ FIXME: 최종속도가 엔진가속에 따라 2배수로 2번까지 증가함, �
 {(EnginePower * GLevel) + External}
 MaxSpeed와 CurSpeed가 최신화 순서가 이상한듯
 !! 혹시 Update(), LateUpdate()에서 문제를 해결할 수 있지 않을까?
-FIXME: 자연 속도 감소가 일어나지 않음
 FIXME: 완전 제동 이후 엔진 RPM이 미쳐 낮아지지 않아 브레이크를 해제하면 급발진함 이게 정상작동인가?
 TODO
 차종에 따른 그래픽, 엔진수준, 기어, 무게
@@ -50,6 +49,7 @@ public class VehicleController
         Accel = GetAcceleration() + GetExternalForce();
         SpeedCalculation();
         RotateHandle();
+        Debug.Log(CurSpeed);
     }
     protected void RotateHandle()
     {
@@ -93,10 +93,12 @@ public class VehicleController
                 {
                     if (CurSpeed > MaxSpeed) CurSpeed += Accel;
                 }
-            else // Gear Neutral and Driving FIXME:
+            else // Gear Neutral and Driving FIXME: 왜 속도가 2배수로 증가하는가
             {
                     // 후진 중 중립기어에 대한 계산이 없음
-                    if (CurSpeed < MaxSpeed) CurSpeed += Accel; // ?????
+                    // if절 조건이 맞지 않기 때문
+                    // 현재 속도 > MaxSpeed(풀악셀 기준임)
+                    if (CurSpeed < MaxSpeed) CurSpeed += Accel;
                 }
         }
         VehicleTransform.Translate(Vector3.forward * Time.deltaTime * CurSpeed);
@@ -104,27 +106,29 @@ public class VehicleController
     protected void EngineControl()
     {
         float nPower = EnginePower;
-        float incRate = 0.2f;
-        float naturalRate = 0.15f;
+        float accPedalAmt = 0.002f;
+        float naturalDecAmt = 0.015f;
+        float naturalIncAmt = 0.0015f;
+
         if (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
         {
-            if (EnginePower < MaxEnginePower) nPower += incRate;
-            else EnginePower = MaxEnginePower;
+            if (EnginePower < MaxEnginePower) nPower += accPedalAmt;
+            else nPower = MaxEnginePower;
         }
         else
         {
             // 자연 감소; 유지;
-            if (EnginePower > MinEnginePower)
+            if (EnginePower > MinEnginePower) // EnginePower 자연 감소
             {
-                nPower -= naturalRate;
+                nPower -= naturalDecAmt;
             }
-            else if (EnginePower < MinEnginePower)
+            else if (EnginePower < MinEnginePower) // EnginePower 자연증가
             {
-                nPower += naturalRate;
+                nPower += naturalIncAmt;
             }
             else
             {
-                EnginePower = MinEnginePower;
+                nPower = MinEnginePower;
             }
         }
         EnginePower = nPower;
@@ -142,7 +146,7 @@ public class VehicleController
         else if (CurGear == Gear.D2) level = 0.7f;
         else if (CurGear == Gear.D3) level = 1.0f;
         else level = 0f;
-        MaxSpeed = EnginePower * level; //FIXME: MaxSpeed의 의미에 맞게 변경; 가속 속도 제한이 풀려버릴것임
+        MaxSpeed = MaxEnginePower * level;
 
         return EnginePower * level;
     }
