@@ -13,8 +13,8 @@ public class TankController : VehicleController
     public TankController(Transform trans) : base(trans)
     {
         TurretTransform = VehicleTransform.GetChild(0).GetChild(0).transform;
-        base.MinEnginePower = 10;
-        base.MaxEnginePower = 50;
+        base.MinEnginePower = 3;
+        base.MaxEnginePower = 20;
         TurretTransform.Rotate(Vector3.up, 0f);
     }
 
