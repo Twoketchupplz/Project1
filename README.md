@@ -15,7 +15,7 @@ W| 가속 패달 | 엔진 회전 수 증가
 A, D | 핸들
 S | 브레이크 패달
 Left Shift | 클러치 패달 | 클러치를 누른 상태에서 기어를 변환<br> Key Up 시 기어가 변환됨
-Arrow Up, Down| 기어 변환 | P - N - D1 - D2 - D3
+Arrow Up, Down| 기어 스틱 | P - N - D1 - D2 - D3
 Numpad Enter | 주차 브레이크
 O | 차량 변경 스위치 | 차량(트럭, 탱크) 선택
 <, >| 포신 | 차량이 탱크인 경우 포신을 회전함
